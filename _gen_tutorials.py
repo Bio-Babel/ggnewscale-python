@@ -3,8 +3,8 @@
 The canonical <r_name>-python layout keeps tutorial notebooks at
 tutorials/ (the distribution artifact listed in pyproject.toml) while
 mkdocs builds from docs/. This pre-build hook bridges the two: it
-mirrors tutorials/*.ipynb into docs/tutorials/ so mkdocs-jupyter can
-render them in place.
+symlinks tutorials/*.ipynb into docs/tutorials/ so mkdocs-jupyter can
+render them in place without a second copy on disk.
 
 docs/tutorials/ is declared in .gitignore and is managed exclusively by
 this hook -- it is wiped and regenerated on every build so renames and
@@ -17,6 +17,7 @@ packages ported without tutorials.
 
 from __future__ import annotations
 
+import os
 import shutil
 from pathlib import Path
 
@@ -26,8 +27,11 @@ def _stage_tutorials(config) -> None:
     src = docs_dir.parent / "tutorials"
     dest = docs_dir / "tutorials"
 
-    if dest.exists():
-        shutil.rmtree(dest)
+    if dest.is_symlink() or dest.exists():
+        if dest.is_symlink() or dest.is_file():
+            dest.unlink()
+        else:
+            shutil.rmtree(dest)
 
     if not src.is_dir():
         return
@@ -41,7 +45,9 @@ def _stage_tutorials(config) -> None:
 
     dest.mkdir(parents=True, exist_ok=True)
     for nb in notebooks:
-        shutil.copy2(nb, dest / nb.name)
+        link = dest / nb.name
+        # Relative symlink keeps the docs tree portable.
+        link.symlink_to(os.path.relpath(nb, link.parent))
 
 
 def on_pre_build(config, **kwargs) -> None:

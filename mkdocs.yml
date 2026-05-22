@@ -22,4 +22,6 @@ hooks:
 
 nav:
   - Home: index.md
+  - Tutorials:
+      - Feature tour: tutorials/ggnewscale_overview.ipynb
   - API Reference: api.md

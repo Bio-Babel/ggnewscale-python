@@ -428,16 +428,29 @@ def bump_aes_guides(guides: Any, original_aes: str, new_aes: str) -> Any:
 
 
 def _rename_columns(data: Any, mapping: dict) -> Any:
-    """Rename DataFrame columns or dict keys via *mapping*.
+    """Rename DataFrame columns or dict keys, dropping colliding targets first.
 
-    Used as a column-rename shim around inner geom/stat methods.
+    Mirrors R ``colnames(data)[colnames(data) == new_aes] <- original_aes``
+    (R/bump-aes-layers.R:55): in R the renamed-from value wins when
+    ``data$<target>`` is later read. Python dicts can't hold duplicates,
+    so the colliding target must be removed before the rename.
     """
     if data is None:
         return data
     if hasattr(data, "rename"):
+        existing = set(data.columns)
+        collisions = [v for k, v in mapping.items()
+                      if k != v and k in existing and v in existing]
+        if collisions:
+            data = data.drop(columns=collisions)
         return data.rename(columns=mapping)
     if isinstance(data, dict):
-        return {mapping.get(k, k): v for k, v in data.items()}
+        out = dict(data)
+        for src, dst in mapping.items():
+            if src == dst or src not in out:
+                continue
+            out[dst] = out.pop(src)
+        return out
     return data
 
 
