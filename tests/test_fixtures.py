@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from tests._fixtures import load_volcano, load_iris, load_mtcars, load_mpg
+from ggnewscale._demo_data import load_volcano, load_iris, load_mtcars, load_mpg
 
 
 def test_volcano_shape_matches_R():

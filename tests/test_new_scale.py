@@ -13,7 +13,7 @@ import pytest
 import ggplot2_py as gg
 from ggnewscale import new_scale_color, new_scale_colour, new_scale_fill
 
-from tests._fixtures import load_iris, load_mpg, load_mtcars, load_volcano
+from ggnewscale._demo_data import load_iris, load_mpg, load_mtcars, load_volcano
 
 
 # ----------------- helpers -----------------

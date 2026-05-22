@@ -28,7 +28,7 @@ import pytest
 import ggplot2_py as gg
 from ggnewscale import new_scale_color
 
-from tests._fixtures import load_volcano
+from ggnewscale._demo_data import load_volcano
 
 _RSCRIPT_ENV = "/home/groups/xiaojie/nianping/Conda_Files/envs/ggrepel-dev/bin/Rscript"
 
