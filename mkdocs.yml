@@ -17,9 +17,6 @@ plugins:
   - mkdocs-jupyter:
       include_source: true
 
-hooks:
-  - _gen_tutorials.py
-
 nav:
   - Home: index.md
   - Tutorials:

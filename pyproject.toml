@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ggnewscale-python"
-version = "0.5.2.9000+3eb57c6"
+version = "0.5.2.9000"
 description = "Python port of the R ggnewscale package — multiple fill and colour scales in ggplot2_py"
 readme = "README.md"
 requires-python = ">=3.10"

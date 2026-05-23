@@ -46,9 +46,12 @@ from ._public import (
 )
 from ._scale_lookup import register_constructor, unregister_constructor
 
-__version__ = "0.5.2.9000+3eb57c6"
+__version__ = "0.5.2.9000"
+__r_commit__ = "3eb57c6"
 
 __all__ = [
+    # Version
+    "__version__",
     "clear_aes",
     "new_scale",
     "new_scale_color",

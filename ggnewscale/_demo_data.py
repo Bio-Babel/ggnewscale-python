@@ -7,13 +7,13 @@ test suite are self-contained without pulling extra dependencies.
 This is *not* a public API — the underscore-prefixed module name and the
 absence of an ``__init__`` re-export signal that. Use at your own risk;
 the data shape can be inspected via the source CSV under
-:data:`ggnewscale.resources.data` but breakage between releases is not
+``ggnewscale/resources/`` but breakage between releases is not
 contractually guarded.
 """
 
 from __future__ import annotations
 
-from importlib.resources import files
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -21,28 +21,24 @@ import pandas as pd
 __all__ = ["load_volcano", "load_iris", "load_mtcars", "load_mpg"]
 
 
-_DATA = files("ggnewscale.resources.data")
+_DATA = Path(__file__).resolve().parent / "resources"
 
 
 def load_volcano() -> np.ndarray:
     """R ``datasets::volcano`` — (87, 61) float matrix of topography heights."""
-    with _DATA.joinpath("volcano.csv").open("rb") as f:
-        return np.loadtxt(f, delimiter=",")
+    return np.loadtxt(_DATA / "volcano.csv", delimiter=",")
 
 
 def load_iris() -> pd.DataFrame:
     """R ``datasets::iris`` — 150 x 5 (Sepal/Petal Length/Width + Species)."""
-    with _DATA.joinpath("iris.csv").open("rb") as f:
-        return pd.read_csv(f)
+    return pd.read_csv(_DATA / "iris.csv")
 
 
 def load_mtcars() -> pd.DataFrame:
     """R ``datasets::mtcars`` — 32 x 12 with rownames promoted to a ``model`` column."""
-    with _DATA.joinpath("mtcars.csv").open("rb") as f:
-        return pd.read_csv(f)
+    return pd.read_csv(_DATA / "mtcars.csv")
 
 
 def load_mpg() -> pd.DataFrame:
     """R ``ggplot2::mpg`` — 234 x 11 fuel-economy dataset."""
-    with _DATA.joinpath("mpg.csv").open("rb") as f:
-        return pd.read_csv(f)
+    return pd.read_csv(_DATA / "mpg.csv")
