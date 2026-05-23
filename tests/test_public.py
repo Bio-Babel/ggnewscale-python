@@ -87,5 +87,7 @@ def test_top_level_dunder_all_lists_six_R_exports_classes_and_extension_hooks():
         # No R equivalent — Python lacks R's implicit search-list lookup.
         "register_constructor",
         "unregister_constructor",
+        # Package version (PEP 396 convention; not an R concept).
+        "__version__",
     }
     assert set(ggnewscale.__all__) == expected
