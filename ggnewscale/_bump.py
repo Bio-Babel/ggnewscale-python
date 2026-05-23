@@ -475,23 +475,9 @@ def _safe_aes_slot(obj: Any, name: str) -> Any:
 
 
 def _resolve_guide_constructor(name: str) -> Any:
-    """Return the callable ``guide_<name>`` from ggplot2_py, never a submodule.
-
-    ggplot2_py defines ``guide_legend``, ``guide_colourbar``, ``guide_colorbar``
-    both as top-level functions *and* as submodules. Plain
-    ``getattr(ggplot2_py, "guide_xxx")`` may return whichever was imported
-    last (submodule wins after explicit ``import ggplot2_py.guide_xxx``).
-    Always prefer the callable.
-    """
+    """Return the callable ``guide_<name>`` from ggplot2_py, or ``None``."""
     candidate = getattr(_gg, f"guide_{name}", None)
-    if callable(candidate):
-        return candidate
-    # Submodule shadows the function — peek directly at the source module.
-    if candidate is not None:
-        fn = getattr(candidate, f"guide_{name}", None)
-        if callable(fn):
-            return fn
-    return None
+    return candidate if callable(candidate) else None
 
 
 def _is_no_guide(guide: Any) -> bool:
